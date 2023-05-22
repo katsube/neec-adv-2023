@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>アドベンチャーゲーム</title>
+    <style>
+      #gamewindow{
+        width: 800px;
+        height: 600px;
+        border: 1px solid gray;
+        background-image: url(image/back/title.jpg);
+      }
+      #message {
+        border: 1px solid gray;
+        border-radius: 5px;
+
+        position: relative;
+        top: 80px;
+        left: 100px;
+        width: 600px;
+        height: 150px;
+        padding: 10px;
+
+        font-size: 22px;
+        letter-spacing: 1px;
+        line-height: 160%;
+
+        background-color: rgba(3, 78, 252, 0.8);
+
+        cursor: pointer;
+        user-select: none;
+      }
+      #chara{
+        position: relative;
+        top: 120px;
+        left: 50px;
+        width: 200px;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div id="gamewindow">
+      <img src="image/chara/6.png" id="chara">
+      <div id="message">
+      </div>
+    </div>
+
+    <script>
+      const scenario = [
+        '吾輩は猫である',
+        '名前はまだ無い',
+        'どこで生まれたかとんと見当がつかぬ'
+      ];
+      let current = 0;
+
+      const message = document.querySelector('#message');
+      message.addEventListener('click', () => {
+        if( current === scenario.length ) {
+          message.textContent = 'おしまい';
+          return(true);
+        }
+        message.textContent = scenario[current];
+        current++;
+      });
+    </script>
+  </body>
+</html>
