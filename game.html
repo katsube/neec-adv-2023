@@ -3,40 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>アドベンチャーゲーム</title>
-    <style>
-      #gamewindow{
-        width: 800px;
-        height: 600px;
-        border: 1px solid gray;
-        background-image: url(image/back/title.jpg);
-      }
-      #message {
-        border: 1px solid gray;
-        border-radius: 5px;
-
-        position: relative;
-        top: 80px;
-        left: 100px;
-        width: 600px;
-        height: 150px;
-        padding: 10px;
-
-        font-size: 22px;
-        letter-spacing: 1px;
-        line-height: 160%;
-
-        background-color: rgba(3, 78, 252, 0.8);
-
-        cursor: pointer;
-        user-select: none;
-      }
-      #chara{
-        position: relative;
-        top: 120px;
-        left: 50px;
-        width: 200px;
-      }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
 
@@ -46,23 +13,77 @@
       </div>
     </div>
 
+    <script src="js/scenario.js"></script>
     <script>
-      const scenario = [
-        '吾輩は猫である',
-        '名前はまだ無い',
-        'どこで生まれたかとんと見当がつかぬ'
-      ];
+      let BGM = null;
       let current = 0;
 
+      const gamewindow = document.querySelector('#gamewindow');
       const message = document.querySelector('#message');
       message.addEventListener('click', () => {
-        if( current === scenario.length ) {
-          message.textContent = 'おしまい';
+        if( current === SCENARIO.length ) {
+          setSerif('おしまい');
           return(true);
         }
-        message.textContent = scenario[current];
+
+        const command = SCENARIO[current][INDEX_COMMAND];
+        const value   = SCENARIO[current][INDEX_VALUE];
+
+        switch( command ){
+          case 'SERIF':
+            setSerif(value);
+            break;
+          case 'BG-IMAGE':
+            setBackgroundImage(value);
+            break;
+          case 'BGM-PLAY':
+            playBGM(value);
+            break;
+        }
+
         current++;
       });
+
+      /**
+       * セリフを表示
+       */
+      function setSerif(text, html=false){
+        if( html ){
+          message.innerHTML = text;
+        }
+        else{
+          message.textContent = text;
+        }
+      }
+
+      /**
+       * 背景画像を設定
+       */
+      function setBackgroundImage(url){
+        gamewindow.style.backgroundImage = `url(image/back/${url})`;
+      }
+
+      /**
+       * BGMを再生
+       */
+      function playBGM(url, volume=0.2){
+        if( BGM !== null ){
+          stopBGM();
+        }
+        const audio = new Audio(`audio/bgm/${url}`);
+        BGM = audio;
+        BGM.volume = volume;
+        BGM.play();
+      }
+
+      /**
+       * BGMを停止
+       */
+      function stopBGM(){
+        if( BGM !== null ){
+          BGM.pause();
+        }
+      }
     </script>
   </body>
 </html>
