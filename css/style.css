@@ -1,0 +1,32 @@
+#gamewindow{
+    width: 800px;
+    height: 600px;
+    border: 1px solid gray;
+    background-image: url(../image/back/title.jpg);
+}
+#message {
+    border: 1px solid gray;
+    border-radius: 5px;
+
+    position: relative;
+    top: 80px;
+    left: 100px;
+    width: 600px;
+    height: 150px;
+    padding: 10px;
+
+    font-size: 22px;
+    letter-spacing: 1px;
+    line-height: 160%;
+
+    background-color: rgba(3, 78, 252, 0.8);
+
+    cursor: pointer;
+    user-select: none;
+}
+#chara{
+    position: relative;
+    top: 120px;
+    left: 50px;
+    width: 200px;
+}
