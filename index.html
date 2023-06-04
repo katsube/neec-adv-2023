@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8">
+    <title>アドベンチャーゲーム</title>
+    <style>
+      body{
+        background-image: url(image/back/title.jpg);
+        background-size: cover;
+      }
+      #game-title{
+        width: 100%;
+        text-align: center;
+      }
+      #btn-start{
+        width: 200px;
+        height: 50px;
+        font-size: 16pt;
+      }
+    </style>
+  </head>
+  <body>
+
+    <form>
+      <button type="button" id="btn-bgm">♪</button>
+    </form>
+
+    <div id="game-title">
+      <img src="image/logo.png">
+
+      <form>
+        <button id="btn-start" type="button">START</button>
+      </form>
+    </div>
+
+    <script>
+      const bgm = new Audio('audio/bgm/bgm_title.mp3');
+      const se = new Audio('audio/se/se_start.mp3');
+
+      const btn = document.querySelector('#btn-start');
+      btn.addEventListener('click', ()=>{
+        btn.setAttribute('disabled', true);
+        btn.textContent = 'Now Loading...';
+
+        bgm.pause();
+        se.play();
+        se.addEventListener('ended', ()=>{
+          location.href = 'name.html';
+        });
+      });
+
+      const btnBgm = document.querySelector('#btn-bgm');
+      btnBgm.addEventListener('click', ()=>{
+        bgm.play();
+      });
+    </script>
+  </body>
+</html>

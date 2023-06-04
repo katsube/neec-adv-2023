@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8">
+    <title>名前入力</title>
+    <style>
+      body{
+        width: 100%;
+        text-align: center;
+
+        background-image: url(image/back/title.jpg);
+        background-size: cover;
+      }
+      #inputname{
+        width: 400px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: rgba(255,255,255,0.8);
+        border-radius: 5px;
+      }
+      h1{
+        font-size: 16pt;
+      }
+      #text-name{
+        width: 250px;
+        height: 30px;
+      }
+      #btn-enter{
+        width: 100px;
+        height: 35px;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div id="inputname">
+      <h1>主人公の名前を入力してください</h1>
+
+      <form>
+        <input id="text-name" type="text">
+        <button id="btn-enter" type="button">決定</button>
+      </form>
+    </div>
+
+    <script>
+      const textName = document.querySelector('#text-name');
+      const btnEnter = document.querySelector('#btn-enter');
+
+      window.addEventListener('load', ()=>{
+        textName.focus();
+      });
+
+      btnEnter.addEventListener('click', ()=>{
+        const name = textName.value;
+        if(name === '' || name.length < 2){
+          alert('2文字以上の名前を入力してください');
+          textName.focus();
+          return(false);
+        }
+
+        localStorage.setItem('username', name);
+        location.href = 'game.html';
+      });
+    </script>
+  </body>
+</html>

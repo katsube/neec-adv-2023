@@ -15,14 +15,26 @@
 
     <script src="js/scenario.js"></script>
     <script>
+      const User = {};
       let current = 0;
       let BGM = null;
+
+      window.addEventListener('load', ()=>{
+        const name = localStorage.getItem('username');
+        if(name !== null){
+          User.name = name;
+        }
+        else{
+          alert('名前が入力されていません。入力ページへ移動します');
+          location.href = 'name.html';
+        }
+      });
 
       const gamewindow = document.querySelector('#gamewindow');
       const message = document.querySelector('#message');
       message.addEventListener('click', () => {
         if( current === scenario.length ) {
-          message.textContent = 'おしまい';
+          setMessage('おしまい');
           return(true);
         }
 
@@ -44,7 +56,8 @@
       });
 
       function setMessage(text){
-        message.textContent = text;
+        const value = text.replace('%name%', User.name);
+        message.textContent = value;
       }
 
       function setBgImage(url){
