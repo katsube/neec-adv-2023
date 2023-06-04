@@ -47,7 +47,14 @@
       const btnEnter = document.querySelector('#btn-enter');
 
       window.addEventListener('load', ()=>{
-        textName.focus();
+        const name = localStorage.getItem('username');
+        if(name !== null){
+          textName.value = name;
+          btnEnter.focus();
+        }
+        else{
+          textName.focus();
+        }
       });
 
       btnEnter.addEventListener('click', ()=>{
