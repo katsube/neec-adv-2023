@@ -7,6 +7,11 @@ window.addEventListener('load', () => {
   // シナリオから自動的にリストアップ
   for(let i=0; i<scenario.length; i++){
     switch(scenario[i][0]){
+      case 'SERIF':
+        if( scenario[i][2] !== undefined || scenario[i][2] !== null ){
+          assets[`audio/voice/${scenario[i][2]}`] = 'sound';
+        }
+        break;
       case 'BG':
         assets[`image/back/${scenario[i][1]}`] = 'image';
         break;
