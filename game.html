@@ -7,6 +7,10 @@
   </head>
   <body>
 
+    <div id="nowloading">
+      <h1>Now Loading...</h1>
+    </div>
+
     <div id="gamewindow">
       <img src="image/chara/6.png" id="chara">
       <div id="message">
@@ -14,10 +18,17 @@
     </div>
 
     <script src="js/scenario.js"></script>
+    <script src="js/assets.js"></script>
     <script>
       let current = 0;
-      let BGM = null;
+      let BGM     = null;
 
+      let ASSETS  = {
+        '_loadTotal': 0, // 読み込むファイルの数
+        '_loaded': 0     // 読み込み済み
+      };
+
+      const nowloading = document.querySelector('#nowloading');
       const gamewindow = document.querySelector('#gamewindow');
       const message = document.querySelector('#message');
       message.addEventListener('click', () => {
@@ -49,15 +60,18 @@
       }
 
       function setBgImage(url){
-        gamewindow.style.backgroundImage = `url(image/back/${url})`;
+        //gamewindow.style.backgroundImage = `url(image/back/${url})`;
+        const asset = ASSETS[`image/back/${url}`];
+        gamewindow.style.backgroundImage = `url(${asset.src})`;   // キャッシュから読み出されるため高速
       }
 
       function playBGM(url){
         if( BGM !== null ){
           BGM.pause();
         }
-        const audio = new Audio(`audio/bgm/${url}`);
-        BGM = audio;
+        // const audio = new Audio(`audio/bgm/${url}`);
+        // BGM = audio;
+        BGM = ASSETS[`audio/bgm/${url}`];
         BGM.volume = 0.2;
         BGM.play();
       }
