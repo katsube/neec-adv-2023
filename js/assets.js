@@ -1,22 +1,35 @@
+/**
+ * ゲーム内で使用する画像や音声ファイルをロードする
+ * (ページ読み込み時に実行)
+ */
 window.addEventListener('load', () => {
   const assets = {};
 
   //--------------------------------------------------
   // 対象ファイルをリストアップ
   //--------------------------------------------------
-  // シナリオから自動的にリストアップ
+  // シナリオから自動的に必要なファイルをリストアップ
   for(let i=0; i<scenario.length; i++){
-    switch(scenario[i][0]){
+    const command = scenario[i][0];
+    const param1  = scenario[i][1];
+
+    switch(command){
+      // セリフからボイスファイル
       case 'SERIF':
-        if( scenario[i][2] !== undefined || scenario[i][2] !== null ){
-          assets[`audio/voice/${scenario[i][2]}`] = 'sound';
+        const voice = scenario[i][2];
+        if( voice !== undefined || voice !== null ){    // 2番目の要素がある場合
+          assets[`audio/voice/${voice}`] = 'sound';
         }
         break;
+
+      // 背景画像
       case 'BG':
-        assets[`image/back/${scenario[i][1]}`] = 'image';
+        assets[`image/back/${param1}`] = 'image';
         break;
+
+      // BGM
       case 'BGM':
-        assets[`audio/bgm/${scenario[i][1]}`] = 'sound';
+        assets[`audio/bgm/${param1}`] = 'sound';
         break;
     }
   }
@@ -30,7 +43,7 @@ window.addEventListener('load', () => {
   // ロード完了を監視
   const timer = setInterval(() => {
     if( ASSETS['_loadTotal'] === ASSETS['_loaded'] ){
-      clearInterval(timer);           // タイマーを止める
+      clearInterval(timer);          // タイマーを止める
       delete ASSETS['_loadTotal'];   // お掃除
       delete ASSETS['_loaded'];      // お掃除
 
