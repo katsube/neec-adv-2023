@@ -7,6 +7,10 @@
   </head>
   <body>
 
+    <div id="nowloading">
+      <h1>Now Loding…</h1>
+    </div>
+
     <div id="gamewindow">
       <img src="image/chara/6.png" id="chara">
       <div id="message">
@@ -14,9 +18,12 @@
     </div>
 
     <script src="js/scenario.js"></script>
+    <script src="js/assets.js"></script>
     <script>
       let current = 0;
       let BGM = null;
+      let VOICE = null;
+      let ASSETS = { };
 
       const gamewindow = document.querySelector('#gamewindow');
       const message = document.querySelector('#message');
@@ -31,7 +38,9 @@
 
         switch(command){
           case 'SERIF':
+            const voice = scenario[current][2];
             setMessage(value);
+            playVoice(voice);
             break;
           case 'BG':
             setBgImage(value);
@@ -52,13 +61,27 @@
         gamewindow.style.backgroundImage = `url(image/back/${url})`;
       }
 
+      function playVoice(url){
+        if( url === null){
+          return(true);
+        }
+        if( VOICE !== null ){
+          VOICE.pause();
+        }
+        //const audio = new Audio(`audio/voice/${url}`);
+        //VOICE = audio;
+        VOICE = ASSETS[`audio/voice/${url}`];
+        VOICE.volume = 1.0;
+        VOICE.play();
+      }
+
       function playBGM(url){
         if( BGM !== null ){
           BGM.pause();
         }
         const audio = new Audio(`audio/bgm/${url}`);
         BGM = audio;
-        BGM.volume = 0.2;
+        BGM.volume = 0.05;
         BGM.play();
       }
     </script>
