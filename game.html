@@ -97,7 +97,7 @@
           alert(`シナリオの読み込み中にエラーが発生しました ${json.error}`);
           return(false);
         }
-        scenario = JSON.parse(json.data);
+        scenario = json.data;
         current = 0;
 
         loadAssets();

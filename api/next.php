@@ -59,5 +59,6 @@ function readScenario(string $file){
 	}
 	fclose($fp);
 
-	return( $result );
+	$json = json_decode($result);
+	return($json);
 }
