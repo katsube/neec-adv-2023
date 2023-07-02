@@ -48,6 +48,9 @@
           case 'BGM':
             playBGM(value);
             break;
+          case 'NEXT':
+            loadScenario(value);
+            break;
         }
         current++;
       });
@@ -83,6 +86,21 @@
         BGM = audio;
         BGM.volume = 0.05;
         BGM.play();
+      }
+
+      async function loadScenario(value){
+        const res = await fetch(`api/next.php?id=${value}`);
+        const json = await res.json();
+        console.log(json);
+
+        if(json.status === false){
+          alert(`シナリオの読み込み中にエラーが発生しました ${json.error}`);
+          return(false);
+        }
+        scenario = JSON.parse(json.data);
+        current = 0;
+
+        loadAssets();
       }
     </script>
   </body>
