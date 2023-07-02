@@ -17,7 +17,7 @@ window.addEventListener('load', () => {
       // セリフからボイスファイル
       case 'SERIF':
         const voice = scenario[i][2];
-        if( voice !== undefined || voice !== null ){    // 2番目の要素がある場合
+        if( voice !== undefined || voice === null ){    // 2番目の要素がある場合
           assets[`audio/voice/${voice}`] = 'sound';
         }
         break;
