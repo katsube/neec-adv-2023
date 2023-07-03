@@ -3,7 +3,21 @@
  * (ページ読み込み時に実行)
  */
 window.addEventListener('load', () => {
+  loadAssets();
+});
+
+
+/**
+ * アセットをロード
+ *
+ */
+function loadAssets(){
   const assets = {};
+
+  //--------------------------------------------------
+  // ロード画面を表示
+  //--------------------------------------------------
+  startLoading();
 
   //--------------------------------------------------
   // 対象ファイルをリストアップ
@@ -17,7 +31,7 @@ window.addEventListener('load', () => {
       // セリフからボイスファイル
       case 'SERIF':
         const voice = scenario[i][2];
-        if( voice !== undefined || voice !== null ){    // 2番目の要素がある場合
+        if( voice !== undefined && voice !== null ){    // 2番目の要素がある場合
           assets[`audio/voice/${voice}`] = 'sound';
         }
         break;
@@ -65,7 +79,7 @@ window.addEventListener('load', () => {
         break;
     }
   }
-});
+}
 
 /**
  * 画像をロードする
@@ -79,6 +93,7 @@ function loadImage(url){
   image.addEventListener('load', () => {
     ASSETS[url] = image;
     ASSETS['_loaded']++;
+    console.log(`[loaded] image ${url}`);
   });
   // ロード失敗時
   image.addEventListener('error', () => {
@@ -102,6 +117,7 @@ function loadSound(url){
   audio.addEventListener('canplaythrough', () => {   // すべて読み込むわけではないので注意
     ASSETS[url] = audio;
     ASSETS['_loaded']++;
+    console.log(`[loaded] audio ${url}`);
   });
   // ロード失敗時
   audio.addEventListener('error', () => {
@@ -111,6 +127,21 @@ function loadSound(url){
 
   // ロード開始
   audio.src = url;
+}
+
+
+/**
+ * ロード開始
+ *
+ */
+function startLoading(){
+  // ゲーム画面を非表示
+  const game = document.querySelector('#gamewindow');
+  game.style.display = 'none';
+
+  // ロード画面を表示
+  const nowloading = document.querySelector('#nowloading');
+  nowloading.style.display = 'block';
 }
 
 /**
