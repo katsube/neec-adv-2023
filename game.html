@@ -58,6 +58,14 @@
             break;
         }
         current++;
+
+        // 配列の一番最後が'skip'なら自動クリック
+        const last = scenario[current-1].length - 1;
+        if( scenario[current-1][last] === 'skip' ){
+          setTimeout(() => {
+            message.click();
+          }, 300);
+        }
       });
 
       function setMessage(text){
