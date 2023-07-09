@@ -4,6 +4,12 @@ html, body{
     width: 100%;
     height: 100%;
 }
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url(../image/back/body.png);
+}
 
 #nowloading{
     background-color: black;
@@ -44,9 +50,26 @@ html, body{
     cursor: pointer;
     user-select: none;
 }
-#chara{
+#chara1{
     position: relative;
+    /* border: 1px solid red; */
     top: 120px;
     left: 50px;
     width: 200px;
+}
+#chara2{
+    position: relative;
+    /* border: 1px solid blue; */
+    top: 120px;
+    left: 90px;
+    width: 200px;
+    height: 295px;
+}
+#chara3{
+    position: relative;
+    /* border: 1px solid green; */
+    top: 120px;
+    left: 140px;
+    width: 200px;
+    height: 295px;
 }

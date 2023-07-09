@@ -12,7 +12,9 @@
     </div>
 
     <div id="gamewindow">
-      <img src="image/chara/6.png" id="chara">
+      <img src="image/chara/6.png"     id="chara1">
+      <img src="image/chara/blank.png" id="chara2">
+      <img src="image/chara/blank.png" id="chara3">
       <div id="message">
       </div>
     </div>
@@ -42,6 +44,9 @@
             setMessage(value);
             playVoice(voice);
             break;
+          case 'CHARA':
+            setCharactor(value);
+            break;
           case 'BG':
             setBgImage(value);
             break;
@@ -58,6 +63,13 @@
       function setMessage(text){
         const name = localStorage.getItem('username');
         message.textContent = text.replace('%name%', name);
+      }
+
+      function setCharactor(value){
+        const place = value[0];
+        const url   = value[1];
+        const chara = document.querySelector(`#chara${place}`);
+        chara.src = `image/chara/${url}`;
       }
 
       function setBgImage(url){
@@ -92,10 +104,10 @@
         const res  = await fetch(`api/next.php?id=${value}`);
         const json = await res.json();
         console.log(json);
-        
+
         scenario = json['data'];
         current = 0;
-        
+
         loadAssets();
       }
     </script>
