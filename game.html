@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>アドベンチャーゲーム</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/choice.css">
   </head>
   <body>
 
@@ -17,6 +18,14 @@
       <img src="image/chara/blank.png" id="chara3">
       <div id="message">
       </div>
+
+      <dialog id="choice">
+        <h1></h1>
+        <button type="button" class="btn-choice" data-next=""></button>
+        <button type="button" class="btn-choice" data-next=""></button>
+        <button type="button" class="btn-choice" data-next=""></button>
+        <button type="button" class="btn-choice" data-next=""></button>
+      </dialog>
     </div>
 
     <script src="js/scenario.js"></script>
@@ -52,6 +61,9 @@
             break;
           case 'BGM':
             playBGM(value);
+            break;
+          case 'CHOICE':
+            showChoice(value);
             break;
           case 'NEXT':
             loadScenario(value);
@@ -106,6 +118,45 @@
         BGM = audio;
         BGM.volume = 0.05;
         BGM.play();
+      }
+
+      function showChoice(value){
+        const title   = value.title;
+        const choices = value.choices;
+
+        // タイトルをセットする
+        const choice = document.querySelector('#choice');
+        const h1 = choice.querySelector('h1');
+        h1.textContent = title;
+
+        // 選択肢をセットする
+        const buttons = choice.querySelectorAll('button');
+        for(let i=0; i<buttons.length; i++){
+          // ボタンの数の方が多い場合は非表示にする
+          if( i >= choices.length ){
+            buttons[i].style.display = 'none';
+            continue;
+          }
+
+          // ボタンのテキストと次のシナリオをセット
+          buttons[i].textContent = choices[i].text;
+          buttons[i].setAttribute('data-next', choices[i].next);
+
+          // 選択肢をクリック
+          buttons[i].addEventListener('click', () => {
+            // 選択肢を閉じる
+            choice.close();
+
+            // 次のシナリオを読み込む
+            const next = buttons[i].getAttribute('data-next');
+            if(next !== 'null'){
+              loadScenario(next);
+            }
+          });
+        }
+
+        // 選択肢を表示
+        choice.showModal();
       }
 
       async function loadScenario(value){
