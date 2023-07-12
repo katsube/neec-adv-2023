@@ -124,38 +124,51 @@
         const title   = value.title;
         const choices = value.choices;
 
+        //------------------------------
         // タイトルをセットする
+        //------------------------------
         const choice = document.querySelector('#choice');
         const h1 = choice.querySelector('h1');
         h1.textContent = title;
 
+        //------------------------------
         // 選択肢をセットする
+        //------------------------------
         const buttons = choice.querySelectorAll('button');
         for(let i=0; i<buttons.length; i++){
-          // ボタンの数の方が多い場合は非表示にする
+          //------------------------------
+          // ボタンが多い場合は非表示
+          //------------------------------
           if( i >= choices.length ){
             buttons[i].style.display = 'none';
             continue;
           }
 
-          // ボタンのテキストと次のシナリオをセット
+          //------------------------------
+          // テキストと次のシナリオをセット
+          //------------------------------
           buttons[i].textContent = choices[i].text;
           buttons[i].setAttribute('data-next', choices[i].next);
+          buttons[i].style.display = 'block';   // 非表示状態の可能性があるので、表示する
 
-          // 選択肢をクリック
+          //------------------------------
+          // 選択肢をクリックした際の動作
+          //------------------------------
           buttons[i].addEventListener('click', () => {
             // 選択肢を閉じる
             choice.close();
 
             // 次のシナリオを読み込む
             const next = buttons[i].getAttribute('data-next');
-            if(next !== 'null'){
+            if(next !== 'null'){    // nullの場合は何もしない（属性から取ってくると文字列化している）
               loadScenario(next);
             }
           });
         }
 
-        // 選択肢を表示
+        //------------------------------
+        // 選択肢を表示する
+        //------------------------------
         choice.showModal();
       }
 
