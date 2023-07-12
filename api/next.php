@@ -1,4 +1,7 @@
 <?php
+
+require_once('lib.php');
+
 //--------------------------------------------
 // ファイルの定義
 //--------------------------------------------
@@ -37,17 +40,3 @@ fclose($fp);
 //--------------------------------------------
 $json = json_decode($data);
 sendResponse(true, $json);
-
-
-/**
- * レスポンスを返却する
- *
- */
-function sendResponse($status, $data){
-	header('Content-type: application/json');
-	echo json_encode([
-	  'status' => $status,
-	  'data'   => $data
-	]);
-}
-

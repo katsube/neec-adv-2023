@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>セーブ/ロードテスト</title>
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+    #frm-save{
+      background-color: lightgoldenrodyellow;
+    }
+    #frm-load{
+      background-color: lightblue;
+    }
+    header{
+      text-align: center;
+    }
+    main{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+    }
+    form{
+      border: 1px solid #ccc;
+      width: 520px;
+      padding: 10px;
+      margin: 30px 30px;
+    }
+    form h2{
+      margin: 0;
+      padding: 5px;
+      font-size: 18pt;
+    }
+    input, textarea{
+      width: 500px;
+      margin: 5px;
+      padding: 5px;
+    }
+    #response-save, #response-load {
+      width: 500px;
+      min-height: 50px;
+      margin-top: 1em;
+      padding: 1em;
+      font-size: 0.8em;
+      font-family: monospace;
+      border: 1px dotted #ccc;
+      background-color: white;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>デバッグツール</h1>
+    <p>set.php, get.phpのデバッグが行なえます。</p>
+  </header>
+  <main>
+    <form id="frm-save">
+      <h2>セーブ</h2>
+      <input type="text" name="id" placeholder="ID"><br>
+      <textarea name="data" placeholder="セーブするデータ" rows="10">{
+  "name": null,
+  "scenario": "1",
+  "current": 0,
+  "bgm": null,
+  "chara1": "6.png",
+  "chara2": "blank.png",
+  "chara3": "blank.png",
+  "bg": "title.jpg"
+  }</textarea><br>
+      <button type="button" id="btn-save">セーブ</button>
+
+      <pre id="response-save">※レスポンスがここに表示されます</pre>
+    </form>
+
+    <form id="frm-load">
+      <h2>ロード</h2>
+      <input type="text" name="id" placeholder="ID"><br>
+      <button type="button" id="btn-load">ロード</button><br>
+
+      <pre id="response-load">※レスポンスがここに表示されます</pre>
+    </form>
+  </main>
+
+  <script>
+    const btnSave = document.querySelector('#btn-save');
+    const btnLoad = document.querySelector('#btn-load');
+
+    /**
+     * セーブボタンのクリックイベント
+     */
+    btnSave.addEventListener('click', async () => {
+      const res = await fetch('set.php', {
+        method: 'POST',
+        body: new URLSearchParams({
+          'id': document.querySelector('#frm-save [name="id"]').value,
+          'data': document.querySelector('#frm-save [name="data"]').value,
+        })
+      });
+      const json = await res.json();
+
+      const div = document.querySelector('#response-save');
+      div.innerHTML = JSON.stringify(json, null, 2);
+    });
+
+    /**
+     * ロードボタンのクリックイベント
+     */
+    btnLoad.addEventListener('click', async () => {
+      const id = document.querySelector('#frm-load [name="id"]').value;
+      const res = await fetch(`get.php?id=${id}`);
+      const json = await res.json();
+
+      const div = document.querySelector('#response-load');
+      div.innerHTML = JSON.stringify(json, null, 2);
+    });
+  </script>
+</body>
+</html>

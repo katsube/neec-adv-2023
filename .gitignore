@@ -1,2 +1,5 @@
 .DS_Store
 Thumbs.db
+
+# セーブデータはgitで管理しない
+api/save/data/save*.json
