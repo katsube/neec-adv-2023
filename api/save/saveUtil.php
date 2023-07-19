@@ -89,6 +89,7 @@ function validSaveData($data){
 		&& (array_key_exists('chara2',   $json)) 	// $jsonにキーchara2が存在しているか
 		&& (array_key_exists('chara3',   $json)) 	// $jsonにキーchara3が存在しているか
 		&& (array_key_exists('bg',       $json)) 	// $jsonにキーbgが存在しているか
+		&& (array_key_exists('bgbody',   $json)) 	// $jsonにキーbgbodyが存在しているか
 
 		// 値のチェック
 		&& (is_null($json['name']) || is_string($json['name']))				// $json['name']がnullか文字列か
@@ -99,5 +100,6 @@ function validSaveData($data){
 		&& (is_null($json['chara2']) || is_string($json['chara2']))		// $json['chara2']がnullか文字列か
 		&& (is_null($json['chara3']) || is_string($json['chara3']))		// $json['chara3']がnullか文字列か
 		&& (is_null($json['bg'])     || is_string($json['bg']))				// $json['bg']がnullか文字列か
+		&& (is_null($json['bgbody']) || is_string($json['bgbody']))		// $json['bgbody']がnullか文字列か
 	);
 }

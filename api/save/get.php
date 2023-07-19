@@ -10,6 +10,19 @@
  *      {"status":true, "data":セーブデータ(JSON)}
  *  ・失敗時
  *      {"status":false, "error":"エラーメッセージ"}
+ *
+ *  ※セーブデータ
+ *  {
+ * 		    "name": "名前",
+ * 		"scenario": "part2",
+ * 		 "current": 1,
+ * 		     "bgm": "bgm_title.mp3",
+ * 		  "chara1": "1.png",
+ * 		  "chara2": "2.png",
+ * 		  "chara3": "blank.png",
+ * 		      "bg": "beach_001.png", // 背景画像(gamewindow)
+ * 		  "bgbody": "body.png"       // 背景画像(bodyタグ)
+ *  }
  */
 
 //--------------------------------------------
