@@ -78,7 +78,7 @@ function validSaveData($data){
 	$json = json_decode($data, true);
 
 	return(
-		($json !== false)													// json_decode()は失敗するとfalseを返す
+		($json !== null)													// json_decode()は失敗するとnullを返す
 
 		// 連想配列内にキーが存在しているか
 		&& (array_key_exists('name',     $json)) 	// $jsonにキーnameが存在しているか
