@@ -85,7 +85,9 @@
 
         const chara = document.querySelector(`#chara${place}`);
         chara.src = `image/chara/${url}`;
-        doAnimeCharactor(anime, [place]);
+        if( anime !== null){
+          doAnimeCharactor(anime, [place]);
+        }
       }
 
       function doAnimeCharactor(anime, value){
