@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>アドベンチャーゲーム</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/anime.css">
   </head>
   <body>
 
@@ -47,6 +48,10 @@
           case 'CHARA':
             setCharactor(value);
             break;
+          case 'ANIME-CHARA':
+            const target = scenario[current][2];
+            doAnimeCharactor(value, target);
+            break;
           case 'BG':
             setBgImage(value);
             break;
@@ -76,8 +81,42 @@
       function setCharactor(value){
         const place = value[0];
         const url   = value[1];
+        const anime = (value[2] === undefined)? null : value[2];
+
         const chara = document.querySelector(`#chara${place}`);
         chara.src = `image/chara/${url}`;
+        doAnimeCharactor(anime, [place]);
+      }
+
+      function doAnimeCharactor(anime, value){
+        const target = (value[0] === undefined)?      1 : value[0];   // 対象のキャラ (1 or 2 or 3)
+        const speed  = (value[1] === undefined)? '0.3s' : value[1];   // 1回のアニメの再生時間 (0.3s)
+        const count  = (value[2] === undefined)?      1 : value[2];   // 繰り返す回数 (1)
+
+        // 対象のキャラクター
+        const chara = document.querySelector(`#chara${target}`);
+
+        // アニメーションが終了したら設定を削除
+        chara.addEventListener('animationend', () => {
+          chara.style.animation = '';
+        });
+
+        switch(anime){
+          // バウンス
+          case 'bounce':
+            chara.style.animation = `anime-bounce ${speed} ${count}`;
+            break;
+
+          // フェードアウト
+          case 'fadeOut':
+            chara.style.animation = `anime-fadeOut ${speed} ${count}`;
+            break;
+
+          // フェードイン
+          case 'fadeIn':
+            chara.style.animation = `anime-fadeIn ${speed} ${count}`;
+            break;
+        }
       }
 
       function setBgImage(url){
