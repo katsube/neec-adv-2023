@@ -13,6 +13,7 @@ window.addEventListener('load', () => {
  */
 function loadAssets(){
   const assets = {};
+  const loadEnd = new CustomEvent('assetsLoadEnd');   // 読み込み完了時に発火するイベントを準備
 
   //--------------------------------------------------
   // ロード画面を表示
@@ -22,6 +23,12 @@ function loadAssets(){
   //--------------------------------------------------
   // 対象ファイルをリストアップ
   //--------------------------------------------------
+  // scenarioが配列かチェック
+  if( Array.isArray(scenario) === false ){
+    alert('シナリオファイルが正しくありません');
+    return(false);
+  }
+
   // シナリオから自動的に必要なファイルをリストアップ
   for(let i=0; i<scenario.length; i++){
     const command = scenario[i][0];
@@ -60,6 +67,9 @@ function loadAssets(){
       clearInterval(timer);          // タイマーを止める
       delete ASSETS['_loadTotal'];   // お掃除
       delete ASSETS['_loaded'];      // お掃除
+
+      // イベントを発火
+      window.dispatchEvent(loadEnd);
 
       // ゲーム開始
       finishLoading();

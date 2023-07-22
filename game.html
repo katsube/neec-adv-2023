@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>アドベンチャーゲーム</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/save.css">
   </head>
   <body>
 
@@ -17,15 +18,45 @@
       <img src="image/chara/blank.png" id="chara3">
       <div id="message">
       </div>
+
+      <div id="actions">
+        <button type="button" id="btn-save">セーブ</button>
+        <button type="button" id="btn-load">ロード</button>
+      </div>
     </div>
 
     <script src="js/scenario.js"></script>
     <script src="js/assets.js"></script>
+    <script src="js/request.js"></script>  <!-- APIと通信するクラス -->
+    <script src="js/save.js"></script>     <!-- セーブ・ロード用のクラス -->
     <script>
       let current = 0;
       let BGM = null;
       let VOICE = null;
       let ASSETS = { };
+
+      // セーブデータ用
+      let STATUS = {
+              name: null,         // ユーザー名
+          scenario: '1',          // シナリオID
+            current: 1,            // scenario配列の添字
+                bgm: null,         // BGM
+            chara1: '6.png',      // キャラクター画像1
+            chara2: 'blank.png',  // キャラクター画像2
+            chara3: 'blank.png',  // キャラクター画像3
+                bg: 'title.jpg',  // 背景画像(gamewindow)
+            bgbody: 'body.png'    // 背景画像(bodyタグ)
+      };
+
+      // ウィンドウの読み込みが終わった際に実行
+      window.addEventListener('load', ()=>{
+        // ユーザー名をlocalStorageから取得
+        const name = localStorage.getItem('username');
+        STATUS['name'] = name;
+
+        // 最初のシナリオをASSETSに格納
+        ASSETS['scenario/1'] = scenario;
+      });
 
       const gamewindow = document.querySelector('#gamewindow');
       const message = document.querySelector('#message');
@@ -65,11 +96,12 @@
             message.click();
           }, 300);
         }
+        STATUS['current'] = current;        // セーブデータ用
         current++;
       });
 
       function setMessage(text){
-        const name = localStorage.getItem('username');
+        const name = STATUS['name'];
         message.textContent = text.replace('%name%', name);
       }
 
@@ -78,10 +110,13 @@
         const url   = value[1];
         const chara = document.querySelector(`#chara${place}`);
         chara.src = `image/chara/${url}`;
+
+        STATUS[`chara${place}`] = url;  // セーブデータ用
       }
 
       function setBgImage(url){
         gamewindow.style.backgroundImage = `url(image/back/${url})`;
+        STATUS['bg'] = url;   // セーブデータ用
       }
 
       function playVoice(url){
@@ -106,15 +141,39 @@
         BGM = audio;
         BGM.volume = 0.05;
         BGM.play();
+
+        STATUS['bgm'] = url;   // セーブデータ用
       }
 
-      async function loadScenario(value){
-        const res  = await fetch(`api/next.php?id=${value}`);
-        const json = await res.json();
-        console.log(json);
+      async function loadScenario(value, defaultCurrent=0){
+        //----------------------------------------
+        // シナリオの読み込み
+        //----------------------------------------
+        // ロード済みならASSETSから取得
+        if( `scenario/${value}` in ASSETS ){
+          scenario = ASSETS[`scenario/${value}`];
+        }
+        // それ以外ならAPIから取得
+        else{
+          const res  = await fetch(`api/next.php?id=${value}`);
+          const json = await res.json();
+          console.log('[loadScenario]', json);
 
-        scenario = json['data'];
-        current = 0;
+          if( json['status'] !== true ){
+            alert('シナリオの取得に失敗しました');
+            return(false);
+          }
+
+          scenario = json['data'];                  // シナリオを上書き
+          ASSETS[`scenario/${value}`] = scenario;   // ASSETSに格納
+        }
+
+        // 添字を更新
+        current = defaultCurrent;
+
+        // セーブデータ用
+        STATUS['scenario'] = value;
+        STATUS['current'] = current;
 
         loadAssets();
       }
