@@ -7,70 +7,41 @@
   </head>
   <body>
 
-    <div id="nowloading">
-      <h1>Now Loding…</h1>
-    </div>
-
     <div id="gamewindow">
-      <img src="image/chara/6.png"     id="chara1">
-      <img src="image/chara/blank.png" id="chara2">
+      <img src="image/chara/blank.png" id="chara1">
+      <img src="image/chara/6.png" id="chara2">
       <img src="image/chara/blank.png" id="chara3">
       <div id="message">
+        神様とお話することができます。<br>
+        何か話しかけてみましょう。
       </div>
     </div>
 
-    <script src="js/scenario.js"></script>
-    <script src="js/assets.js"></script>
+    <script src="js/chatgpt.js"></script>
     <script>
-      let current = 0;
-      let BGM = null;
-      let VOICE = null;
-      let ASSETS = { };
+      let NOW_THINKING = false;
 
       const gamewindow = document.querySelector('#gamewindow');
       const message = document.querySelector('#message');
-      message.addEventListener('click', () => {
-        if( current === scenario.length ) {
-          message.textContent = 'おしまい';
-          return(true);
+      message.addEventListener('click', ()=>{
+        if(NOW_THINKING === false){
+          showInput();
         }
-
-        const command = scenario[current][0];
-        const value   = scenario[current][1];
-
-        switch(command){
-          case 'SERIF':
-            const voice = scenario[current][2];
-            setMessage(value);
-            playVoice(voice);
-            break;
-          case 'CHARA':
-            setCharactor(value);
-            break;
-          case 'BG':
-            setBgImage(value);
-            break;
-          case 'BGM':
-            playBGM(value);
-            break;
-          case 'NEXT':
-            loadScenario(value);
-            break;
-        }
-
-        // 配列の一番最後が'skip'なら自動クリック
-        const last = scenario[current].length - 1;
-        if( scenario[current][last] === 'skip' ){
-          setTimeout(() => {
-            message.click();
-          }, 300);
-        }
-        current++;
       });
 
-      function setMessage(text){
+      async function showInput(){
+        const input = prompt('何か話しかけてみましょう');
+
+        NOW_THINKING = true;
+        setMessage('神様が考え中です...', false);
+        const response = await requestChatGPT(input);
+        setMessage(response);
+        NOW_THINKING = false;
+      }
+
+      function setMessage(text, mode=true){
         const name = localStorage.getItem('username');
-        message.textContent = text.replace('%name%', name);
+        message.innerHTML = text.replace(/%name%/g, name);
       }
 
       function setCharactor(value){
@@ -91,8 +62,6 @@
         if( VOICE !== null ){
           VOICE.pause();
         }
-        //const audio = new Audio(`audio/voice/${url}`);
-        //VOICE = audio;
         VOICE = ASSETS[`audio/voice/${url}`];
         VOICE.volume = 1.0;
         VOICE.play();
@@ -102,21 +71,9 @@
         if( BGM !== null ){
           BGM.pause();
         }
-        const audio = new Audio(`audio/bgm/${url}`);
-        BGM = audio;
+        BGM = ASSETS[`audio/bgm/${url}`];;
         BGM.volume = 0.05;
         BGM.play();
-      }
-
-      async function loadScenario(value){
-        const res  = await fetch(`api/next.php?id=${value}`);
-        const json = await res.json();
-        console.log(json);
-
-        scenario = json['data'];
-        current = 0;
-
-        loadAssets();
       }
     </script>
   </body>
